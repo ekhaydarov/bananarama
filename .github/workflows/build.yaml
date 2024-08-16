@@ -41,7 +41,8 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+          images: ${{ env.IMAGE_NAME }}
+          tags: ${{ env.IMAGE_TAG }}
 
       - name: build and push docker image to registry
         uses: docker/build-push-action@v6
@@ -74,5 +75,6 @@ jobs:
           manifests: |
             ./k8s.yaml
           images: |
-            ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
+            ${{ steps.meta.outputs.tags }}
+
         
