@@ -46,7 +46,7 @@ jobs:
       - name: build and push docker image to registry
         uses: docker/build-push-action@v6
         with:
-          provenance: mode=max
+          provenance: false # do not use this if passing in secrets in the build process as that will be sent to container registry and leaked
           push: true
           tags: ${{ steps.meta.outputs.tags }}
 
