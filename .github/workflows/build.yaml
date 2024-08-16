@@ -17,10 +17,10 @@ jobs:
       # validate bitcoind is running https://www.reddit.com/r/Bitcoin/comments/ip62ik/is_there_a_curl_or_nc_command_to_test_node/g4j3dvc/
       - name: Run tests
         run: |
-        docker build -t ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
-        docker run -d ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} && sleep 10
-        export CONTAINER_IP=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps | grep bitcoind | cut -d ' ' -f 1))
-        nc -v -n -z ${CONTAINER_IP} 8333
+          docker build -t ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} .
+          docker run -d ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} && sleep 10
+          export CONTAINER_IP=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker ps | grep bitcoind | cut -d ' ' -f 1))
+          nc -v -n -z ${CONTAINER_IP} 8333
 
   build:
     name: push docker image to hub
