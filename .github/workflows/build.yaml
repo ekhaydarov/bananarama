@@ -77,4 +77,12 @@ jobs:
           images: |
             ${{ steps.meta.outputs.tags }}
 
+  validate:
+    name: validate k8s deploy
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - name: validation
+        run: |
+          nc -v -n -z ${BITCOIND_URL} 8333
         
