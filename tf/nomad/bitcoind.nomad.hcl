@@ -43,6 +43,9 @@ job "bitcoind" {
       port "http" {
         static = 8332
       }
+      port "btcpeer" {
+        static = 8333
+      }
     }
 
     task "server" {
@@ -64,18 +67,17 @@ job "bitcoind" {
       resources {
         cpu    = 500
         memory = 256
-        disk   = 8192 # test on my machine need to expand to handle the entire blockchain data
+        disk   = 8192 # test on my machine need to expand to 800GB handle the entire blockchain data
       }
 
       service {
         // name = "bitcoind" no need for name as the default is more explicit (string: "<job>-<taskgroup>-<task>")
-        port     = "http"
+        port     = "btcpeer"
         provider = "nomad" # otherwise you get errors like this https://github.com/hashicorp/waypoint/issues/3376
 
         check {
-          name     = "http-check"
-          type     = "http"
-          path     = "/"
+          type     = "tcp"
+          port     = "btcpeer"
           interval = "10s"
           timeout  = "2s"
         }

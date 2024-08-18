@@ -12,6 +12,10 @@ spec:
       name: http
       port: 8332
       targetPort: 8332
+    - protocol: TCP
+      name: http
+      port: 8333
+      targetPort: 8333
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -63,6 +67,8 @@ spec:
     - ports:
         - protocol: TCP
           port: 8332
+        - protocol: TCP
+          port: 8333
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -125,12 +131,12 @@ spec:
           # liveness probe example from https://github.com/ompldr/kubernetes/blob/master/bitcoind-us-west1.yaml
           readinessProbe:
             tcpSocket:
-              port: 8332
+              port: 8333
             initialDelaySeconds: 120
             periodSeconds: 5
           livenessProbe:
             tcpSocket:
-              port: 8332
+              port: 8333
             initialDelaySeconds: 120
             periodSeconds: 5
           volumeMounts:
