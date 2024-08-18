@@ -40,3 +40,22 @@ module "iam" {
   ]
 }
 ```
+
+## nomad deployment
+example docs on nomad [here](https://github.com/hashicorp/nomad-guides/tree/master/application-deployment/microservices)
+cannot test sentinel due to error
+```bash
+nomad sentinel apply -level=advisory test-policy test.sentinel
+Error writing Sentinel policy: Unexpected response code: 501 (Nomad Enterprise only endpoint)
+```
+
+Seems like you need to manually apply nomad client policy, no mention of it in nomad [tf provider ](https://registry.terraform.io/providers/hashicorp/nomad/latest/docs)
+```bash
+nomad agent -config=server.conf
+```
+
+Prerequisites are to install and run a dev nomad server. manually update agents and then you can use terraform to plan and apply nomad jobs.
+```bash
+make nomad-agent-config
+make nomad-deploy
+```

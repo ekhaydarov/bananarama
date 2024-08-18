@@ -1,12 +1,8 @@
-locals {
-  root_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
-}
-
 data "aws_caller_identity" "current" {}
 
-resource "aws_iam_role" "all_users" {
-  name               = "assume_all_users"
-  assume_role_policy = jsonencode({
+locals {
+  root_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+  base_policy = {
     Version = "2012-10-17",
     Statement = [{
       Effect = "Allow",
@@ -15,27 +11,29 @@ resource "aws_iam_role" "all_users" {
       },
       Action = "sts:AssumeRole",
     }]
-  })
-}
+  }
 
-# restrict the role to just the group
-resource "aws_iam_role" "group" {
-  name               = var.role_name
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17",
-    Statement = [{
-      Effect = "Allow",
-      Principal = {
-        AWS = local.root_arn
-      },
-      Action = "sts:AssumeRole",
+  group_policy = merge(
+    local.base_policy,
+    {
       Condition = {
         StringEquals = {
           "aws:PrincipalTag/Group" = [ var.group_name ]
         }
       }
-    }]
-  })
+    }
+  )
+}
+
+resource "aws_iam_role" "all_users" {
+  name               = "assume_all_users"
+  assume_role_policy = jsonencode(local.base_policy)
+}
+
+# restrict the role to just the group
+resource "aws_iam_role" "group" {
+  name               = var.role_name
+  assume_role_policy = jsonencode(local.group_policy)
 }
 
 resource "aws_iam_policy" "assume_all_users" {

@@ -33,7 +33,6 @@ COPY --from=downloader /lib64/ld-linux-x86-64.so.2 /lib64/ld-linux-x86-64.so.2
 WORKDIR /.bitcoin
 COPY --from=downloader /.bitcoin/wallets /.bitcoin/wallets
 
-
 EXPOSE 8332 8333
 
 CMD ["bitcoind"]

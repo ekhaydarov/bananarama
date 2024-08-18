@@ -21,3 +21,13 @@ logparser-sh:
 
 logparser-py:
 	python3 logparser.py
+
+nomad-agent-config:
+	$(MAKE) -C ./tf/nomad nomad-agent-config
+	nomad agent -config=agent.nomad.hcl
+
+nomad-deploy:
+	$(MAKE) -C ./tf/nomad nomad-deploy
+	terraform init
+	terraform plan
+	terraform apply

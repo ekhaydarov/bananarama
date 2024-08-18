@@ -34,7 +34,7 @@ jobs:
         uses: docker/login-action@v3
         with:
           username: erikpack
-          password: ${{secrets.DOCKERHUB_TOKEN}}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
       
       # attestations https://docs.docker.com/build/ci/github-actions/attestations/
       - name: Extract metadata
